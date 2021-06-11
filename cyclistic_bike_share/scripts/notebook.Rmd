@@ -1,0 +1,253 @@
+---
+title: <b>"How Does a Bike-Share Navigate Speedy Success?"</b>
+author: "William"
+output:
+  html_document:
+    df_print: paged
+    self_contained: no
+---
+
+***
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## **Scenario**
+
+<p align="center">
+  <img src = "logo.png" alt = "logo" width = "50%"/>
+</p>
+
+<div style="text-align: justify">
+The Cyclistic is a bike-sharing company. They desire better to understand the
+customer behavior to create new marketing strategy.
+
+In order to do that, the company provide their dataset to a data analyst team
+analyze and come up with data insights. Then, the executive team will inspect
+the results and further make data-driven decision-making.
+
+The Cyclistic has more thousands of bikes divided in different categories such
+as classic, reclining, electric. There are two types of customers, the ones with
+annual membership and the one with a pass (single-ride or full-day).
+</div>
+
+***
+
+## **Ask**
+In this phase, we define the problem and the stakeholders.
+
+### Business task
+The business task is to determine how different the customers use the company's
+bikes.
+
+### Stakeholders
+The stakeholders are:
+
+  * Primary: director of marketing
+  * Secondary: marketing analytics team
+
+***
+
+## **Prepare**
+Now, the focus is to collect, store, and evaluate the datasets
+
+### Information about the dataset
+Regarding the dataset, we have the following information:
+
+  * It is external data stored in the [cloud](https://divvy-tripdata.s3.amazonaws.com/index.html)
+  * It used the long data format
+  * First-party data (reliable and original)
+  * There is a file for each past 12 months (current)
+  * It is distributed under a [license](https://www.divvybikes.com/data-license-agreement)
+  * There is not Personally Identifiable Information (PII)
+  
+### Data acquisition process
+The following process is utilized:
+
+  * Each dataset is downloaded
+  * Appropriately stored in a folder for original datasets
+  
+### Identifying issues
+In order to identify issues with the data, we:
+
+  * Evaluate the ride length and spot unusual observations
+  * Filtered the data and identified missing values
+  * Sorted the data and found inconsistent attribute format
+
+***
+
+## **Process**
+Here, we perform the data cleaning, ensure integrity, and that it is complete,
+correct, and relevant.
+
+### Tools
+We selected tools to perform specific tools, as described next.
+
+  * Spreadsheets: perform initial data inspection
+  * R: develop scripts to clean, transform, organize, and summarize the datasets
+  * Tableau: create data visualizations
+  * R Notebook: provide a complete report of the data analysis process
+
+### Libraries utilized
+Here is a list of the R packages utilized:
+
+  * Tidyverse
+  * Lubridate
+  * ReadR
+  * Tibble
+  * DplyR
+  
+They can be installed and loaded as follows.
+
+```{r, install_load_libraries}
+# Installing libraries
+#install.packages("tidyverse")
+#install.packages("lubridate")
+#install.packages("readr")
+#install.packages("tibble")
+#install.packages("dplyr")
+
+# Loading libraries
+library("tidyverse")
+library("lubridate")
+library("readr")
+library("tibble")
+library("dplyr")
+```
+
+### Cleaning all the CSV files and saving in the cleaned datasets folder
+In this step, we perform the following tasks:
+
+  * Discard ride id, latitude, and longitude columns
+  * Remove rows with missing values
+  * Remove duplicated rows
+  * Add ride length column (in seconds)
+  * Add day of week column (1 means Sunday and 7 means Saturday)
+  * Remove rides with less than 5 minutes
+  * Remove rides with more than 24 hours
+  * Fix rows with negative ride length
+  * Rename the member casual column to membership
+  * Save the cleaned datasets
+
+```{r, cleaning_datasets, code = readLines("data_cleaning.R", warn = FALSE)}
+```
+
+***
+
+## **Analyze**
+
+Now, we analyze the data to find patterns, relationship, or trends. Then, we
+write down all the insights.
+
+### Aggregate data
+
+We aggregate all the 12 datasets into a single file. We assume the datasets do
+not contain duplicates with each other.
+
+```{r, aggregate_datasets, code = readLines("data_aggregation.R", warn = FALSE)}
+```
+
+### Summarize data
+In this step, we create several approaches to the dataset, as follows.
+
+  * Identify the top 10 stations that members start a ride
+    + Include the values for casuals on the same stations
+  * Identify the top 10 stations that casuals start a ride
+    + Include the values for members on the same stations
+  * Summarize for member as casuals:
+    + Minimum ride length
+    + Mean ride length
+    + Maximum ride length
+    + Mode of the day of week
+    + Frequency of rides
+  * Frequency of rides by day
+  * Frequency of rideables used
+  * Frequency of rides by month
+  * Frequency of rides by period of the day
+  * Organize the columns of each item above
+  * Save each approach in a separate file
+
+```{r, summarizing_data, code = readLines("data_summarize.R", warn = FALSE)}
+```
+
+### Analysis summary
+
+<div style="text-align: justify">
+Analyzing the summarized data, we have the following findings:
+
+  * Most stations that members and casuals start their rides, but there are in
+  common
+  * The minimum and maximum ride length are similar between the different
+  customers, but the casuals have longer rides (~2.2x) in average
+  * The number of members riders is almost 1.3x the casuals ones.
+  * Both types of customers frequently ride in Saturday
+  * The casual riders often rent bikes on the weekend
+  * The number of member rides increases from Sunday to Saturday
+  * For both customers, the months with highest rides are June, July, August,
+  and September
+  * Member rides are higher than casuals almost all day, except evening
+  * Casual riders prefer electric bikes over classic bikes while members the
+  opposite.
+</div>
+
+***
+
+## **Share**
+
+In this phase, we create compelling data visualizations that encompasses our
+findings
+
+### Data visualizations
+
+<div style="text-align: justify">
+We created different data visualizations. Next, we briefly describe each one.
+
+  * Top 10 stations where members start a ride: contains the top stations that
+  members frequently start a ride and the values for casual customers
+  counterpart
+  * Top 10 stations where casuals start a ride: presents the top stations where
+  casual customers start a ride and the corresponding values for members
+  * Summary of the dataset: it is a pivot table with five fields summarizing
+  data of each type of member
+  * Riders behavior during the week: there is a line for each type of member and
+  the percent is related to the number of rides for each month
+  * Frequency of each rideable: each circle represents the bike type, the color
+  is whether casual or member customer, and the size is the percent of rides for
+  each membership
+  * Frequency of rides by month: each line is for a different membership, the
+  data presented is for the last 12 months, and the percent is the portion of
+  rides for each membership by month
+  * Rides during the day: the colors represents the types of membership and the
+  size of each pie chart is the amount of rides at each period
+</div>
+
+<iframe src = "https://public.tableau.com/views/CyclisticBike-Share/
+Top10stationswheremembersstartaride?:language=en-US&:display_count=n&:
+origin=viz_share_link:showVizHome=no&:embed=true" width="100%" height="700">
+</iframe>
+
+
+### Conclusion
+
+As a result of the data analysis process, we point out the key findings:
+
+  * Customers are mostly concentrated in different stations
+  * Casual riders takes longer rides on average, but members use bikes more often
+  * Members use bikes regularly during the week, casuals ride on the weekend
+  
+***
+
+## **Act**
+
+This step is dedicated to gather insights and decide how best to implement them.
+
+###  Call to action
+  
+  * Reach casual customers on the weekend, preferably Saturday afternoon.
+  * Do marketing campaigns at casual riders top stations near parks
+  * Create customer acquisition programs for June to September
+
+***
+
+#### **Let's ride a bike!**
